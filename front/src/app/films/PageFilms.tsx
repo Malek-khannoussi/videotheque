@@ -34,9 +34,7 @@ export const PageFilms = () => {
     <Page>
       <PageContent>
         <HStack alignItems="flex-start" justifyContent="space-between" my="5">
-          <Heading size="xl" mb="4">
-            Films
-          </Heading>
+          <Heading size="xl">Films</Heading>
           <Select
             isClearable
             minW="60"
