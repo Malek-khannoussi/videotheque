@@ -13,12 +13,13 @@ import { AiFillLeftCircle, AiFillRightCircle } from 'react-icons/ai';
 import { Film } from '@/app/films/films.types';
 
 interface SliderProps extends FlexProps {
-  sliderDatas: Film[];
-  onClickSlide?: (slider: Film) => void;
+  sliderDatas: Film[] | null;
+  onClickSlide: (slider: Film | null) => void;
 }
-const SlideImage: FC<ImageProps> = ({ src, ...props }) =>
+const SlideImage: FC<ImageProps> = ({ src = '', ...props }) =>
   !!src ? (
     <Image
+      m={4}
       bg="gray.50"
       borderRadius="lg"
       boxShadow="lg"
@@ -27,7 +28,11 @@ const SlideImage: FC<ImageProps> = ({ src, ...props }) =>
       {...props}
     />
   ) : null;
-const Slider: FC<SliderProps> = ({ sliderDatas, onClickSlide, ...rest }) => {
+const Slider: FC<SliderProps> = ({
+  sliderDatas = [],
+  onClickSlide,
+  ...rest
+}) => {
   const [current, setCurrent] = useState(0);
   const length = sliderDatas?.length || 0;
   const nextSlide = () => {
@@ -48,44 +53,48 @@ const Slider: FC<SliderProps> = ({ sliderDatas, onClickSlide, ...rest }) => {
       <IconButton
         icon={<AiFillLeftCircle size="lg" />}
         aria-label="left button"
+        bgColor="transparent"
         onClick={prevSlide}
       />
       <Flex alignItems="center">
         <ScaleFade initialScale={0.6} in>
           <SlideImage
-            mr="-15"
             onClick={() =>
-              onClickSlide &&
               onClickSlide(
-                sliderDatas[current === length - 1 ? 0 : current + 1]
+                sliderDatas?.[current === length - 1 ? 0 : current + 1] ?? null
               )
             }
-            src={sliderDatas[current === length - 1 ? 0 : current + 1].image}
+            src={
+              sliderDatas?.[current === length - 1 ? 0 : current + 1].image ??
+              ''
+            }
           />
         </ScaleFade>
         <ScaleFade initialScale={0.6} in>
           <SlideImage
             boxShadow="dark-lg"
-            onClick={() => onClickSlide && onClickSlide(sliderDatas[current])}
-            src={sliderDatas[current].image}
+            onClick={() => onClickSlide(sliderDatas?.[current] ?? null)}
+            src={sliderDatas?.[current].image ?? ''}
           />
-        </ScaleFade>{' '}
+        </ScaleFade>
         <ScaleFade initialScale={0.6} in>
           <SlideImage
-            ml="-15"
             onClick={() =>
-              onClickSlide &&
               onClickSlide(
-                sliderDatas[current === 0 ? length - 1 : current - 1]
+                sliderDatas?.[current === 0 ? length - 1 : current - 1] ?? null
               )
             }
-            src={sliderDatas[current === 0 ? length - 1 : current - 1].image}
+            src={
+              sliderDatas?.[current === 0 ? length - 1 : current - 1].image ??
+              ''
+            }
           />
         </ScaleFade>
       </Flex>
       <IconButton
         icon={<AiFillRightCircle size="lg" />}
         aria-label="right button"
+        bgColor="transparent"
         onClick={nextSlide}
       />
     </Flex>

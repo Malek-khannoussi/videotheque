@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 
-import { Badge, HStack, Heading, Image, Text, VStack } from '@chakra-ui/react';
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
+import { HStack, Heading } from '@chakra-ui/react';
 
+import { FilmDescription } from '@/app/films/FilmDescription';
 import { useCategoriesList, useFilmsList } from '@/app/films/films.service';
 import { Categorie, Film } from '@/app/films/films.types';
 import { Page, PageContent } from '@/app/layout';
@@ -19,7 +18,6 @@ import {
 } from '@/components';
 import Slider from '@/components/Slider';
 
-dayjs.extend(duration);
 export const PageFilms = () => {
   const [currentCategory, setCurentCategory] = useState<Categorie | null>(null);
   const { page, setPage } = usePaginationFromUrl();
@@ -31,7 +29,7 @@ export const PageFilms = () => {
   });
   const [curentFilm, setCurentFilm] = useState<Film | null>(null);
   const isSlideVisibel =
-    (!currentCategory && films) || !!currentCategory?.movies?.length;
+    (!currentCategory && !!films) || !!currentCategory?.movies?.length;
   return (
     <Page>
       <PageContent>
@@ -55,46 +53,9 @@ export const PageFilms = () => {
             }}
           />
         </HStack>
-        {!!curentFilm ? (
-          <HStack justifyContent="space-between" mb="6">
-            <VStack alignItems="flex-start">
-              <Heading> {curentFilm?.title}</Heading>
-              <Text fontSize="xl"> {curentFilm?.description}</Text>
-              <HStack wrap="wrap">
-                {curentFilm?.actors.split(',')?.map((actor, key) => (
-                  <Badge
-                    borderRadius="lg"
-                    fontSize="lg"
-                    px="2"
-                    display="inline"
-                    colorScheme="purple"
-                    key={key}
-                    m="1"
-                  >
-                    {actor}
-                  </Badge>
-                ))}
-              </HStack>
-              <Text>
-                duration:
-                {dayjs.duration(curentFilm?.duration).format('HH:mm:ss')}
-              </Text>
-              <Text> age: - {curentFilm?.ageLimit}</Text>
-            </VStack>
-            {curentFilm?.image && (
-              <Image
-                borderRadius="lg"
-                boxShadow="xl"
-                src={`data:image/png;base64,${curentFilm?.image}`}
-                minW="20rem"
-              />
-            )}
-          </HStack>
-        ) : (
-          isSlideVisibel && (
-            <Heading textAlign="center">Sélectionner un film</Heading>
-          )
-        )}
+
+        <FilmDescription film={curentFilm} isSlideVisibel={isSlideVisibel} />
+
         {isSlideVisibel ? (
           <>
             <Slider
