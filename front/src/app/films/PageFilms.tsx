@@ -62,7 +62,7 @@ export const PageFilms = () => {
               sliderDatas={
                 currentCategory ? currentCategory.movies : films || null
               }
-              onClickSlide={(film: Film) => setCurentFilm(film)}
+              onClickSlide={(film: Film | null) => setCurentFilm(film)}
             />
             <Pagination
               isLoadingPage={isLoadingPage}
